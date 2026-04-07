@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -11,4 +11,59 @@
     <p>Este es mi primer código en HTML.</p>
 
 </body>
+</html> -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MindAR Face - Máscara Completa</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-face-aframe.prod.js"></script>
+    <style>
+      body { margin: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+
+    <a-scene 
+      mindar-face="userFill: false; uiScanning: no; filterMinCF:0.001; filterBeta: 0.1;" 
+      embedded 
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false">
+      
+      <a-assets>
+        <a-asset-item id="mascaraModel" src="./Scream XD.glb"></a-asset-item>
+      </a-assets>
+
+      <a-camera active="false" position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-face-target="anchorIndex: 168">
+        <a-gltf-model 
+          src="#mascaraModel" 
+          rotation="0 0 0" 
+          position="0 0 0" 
+          scale="1 1 1">
+        </a-gltf-model>
+      </a-entity>
+
+    </a-scene>
+
+    <script>
+      // Mantenemos tu configuración de cámara trasera
+      document.addEventListener("DOMContentLoaded", () => {
+        const sceneEl = document.querySelector('a-scene');
+        sceneEl.addEventListener('viewready', () => {
+          const controller = sceneEl.systems["mindar-face-system"].controller;
+          if(controller) {
+            controller.videoConfig = {
+              facingMode: 'environment',
+              mirrored: false
+            };
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

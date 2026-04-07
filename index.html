@@ -12,7 +12,7 @@
 
 </body>
 </html> -->
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -66,5 +66,90 @@
       });
     </script>
   </body>
-</html> 
+</html>  -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MindAR Face - Selector de Máscaras</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-face-aframe.prod.js"></script>
+    <style>
+      body { margin: 0; overflow: hidden; }
+      /* Estilos para los botones */
+      .options-panel {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        gap: 10px;
+      }
+      button {
+        padding: 12px 20px;
+        border-radius: 25px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      }
+      button:active { background: #ccc; }
+    </style>
+  </head>
+  <body>
 
+    <div class="options-panel">
+      <button onclick="changeMask(0)">Máscara 1</button>
+      <button onclick="changeMask(1)">Máscara 2</button>
+      <button onclick="changeMask(2)">Máscara 3</button>
+    </div>
+
+    <a-scene 
+      mindar-face="userFill: false; uiScanning: no;" 
+      embedded color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false">
+      
+      <a-assets>
+        <a-asset-item id="mask1" src="./Scream XD.glb"></a-asset-item>
+        <a-asset-item id="mask2" src="./mascara2.glb"></a-asset-item>
+        <a-asset-item id="mask3" src="./mascara3.glb"></a-asset-item>
+      </a-assets>
+
+      <a-camera active="false" position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-face-target="anchorIndex: 168">
+        <a-gltf-model id="model1" src="#mask1" visible="true" position="0 0 0" scale="1 1 1"></a-gltf-model>
+        <a-gltf-model id="model2" src="#mask2" visible="false" position="0 0 0" scale="1 1 1"></a-gltf-model>
+        <a-gltf-model id="model3" src="#mask3" visible="false" position="0 0 0" scale="1 1 1"></a-gltf-model>
+      </a-entity>
+
+    </a-scene>
+
+    <script>
+      const models = ["model1", "model2", "model3"];
+
+      function changeMask(index) {
+        models.forEach((id, i) => {
+          const el = document.getElementById(id);
+          // Si el índice coincide, lo mostramos; si no, lo ocultamos
+          el.setAttribute("visible", i === index);
+        });
+      }
+
+      // Configuración de cámara trasera (se mantiene igual)
+      document.addEventListener("DOMContentLoaded", () => {
+        const sceneEl = document.querySelector('a-scene');
+        sceneEl.addEventListener('viewready', () => {
+          const controller = sceneEl.systems["mindar-face-system"].controller;
+          if(controller) {
+            controller.videoConfig = { facingMode: 'environment', mirrored: false };
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
